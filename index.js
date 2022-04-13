@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 const prompt = require("prompt-sync")({ sigint: true });
 const shell = require("shelljs");
+const fs = require("fs");
 const githubURL = "http://github.com/tribeplatform/tribe-starter-app";
 function main() {
   const name = prompt("Name:");
@@ -19,7 +20,12 @@ function main() {
 
   shell.cd(name);
 
+  // Remove git history
   shell.rm("-rf", ".git");
+
+  const pkgJson = require("./package.json");
+  pkgJson.name = name;
+  fs.writeFileSync("package.json", JSON.stringify(pkgJson, null, 2));
 
   shell.exec("git init");
   shell.exec("git add -A");
