@@ -1,7 +1,7 @@
 {
   "name": "create-tribe-app",
   "version": "1.0.0",
-  "description": "A script to create initiate your Tribe app repository using tribe-starter-app",
+  "description": "A script to initiate your Tribe app repository using tribe-starter-app",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
