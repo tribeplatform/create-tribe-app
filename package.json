@@ -12,6 +12,7 @@
   "author": "Tribeplatform",
   "license": "ISC",
   "dependencies": {
+    "commander": "^9.2.0",
     "prompt-sync": "^4.2.0",
     "shelljs": "^0.8.5"
   }
