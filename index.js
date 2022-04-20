@@ -1,11 +1,11 @@
+#!/usr/bin/env node
 const prompt = require("prompt-sync")({ sigint: true });
 const shell = require("shelljs");
 
-const { program } = require("commander");
+const commander = require("commander");
 const packageJson = require("./package.json");
-program
-  .name("create-tribe-app")
-  .description("CLI to generate a sample project using Tribe app starter kit")
+const program = new commander.Command(packageJson.name)
+  .description(packageJson.description)
   .version(packageJson.version, "--version", "Output the current version")
   .showSuggestionAfterError()
   .showHelpAfterError("(add --help for additional information)")
@@ -17,11 +17,9 @@ program
   .option("--client-secret <clientSecret>", "Client Secret of the app.")
   .option("--sign-secret <signSecret>", "Webhook sign secret of the app.")
   .option("-v, --verbose", "Show each steps")
-  .parse();
+  .parse(process.argv);
 
 const options = program.opts();
-
-console.log(options);
 
 const fs = require("fs");
 

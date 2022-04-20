@@ -1,12 +1,14 @@
 {
   "name": "create-tribe-app",
-  "version": "1.0.3",
-  "description": "A script to initiate your Tribe app repository using tribe-starter-app",
+  "version": "1.0.4",
+  "description": "CLI to generate a sample project using Tribe app starter kit",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "bin": "index.js",
+  "bin": {
+    "create-tribe-app": "index.js"
+  },
   "author": "Tribe Platform",
   "license": "ISC",
   "dependencies": {
