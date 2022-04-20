@@ -45,21 +45,53 @@ function initGit() {
   shell.exec(`git commit -m "Initial commit"`);
 }
 
+function modifyServerEnv(directory) {
+  let serverEnvString = fs
+    .readFileSync(`${directory}/server/.env.example`)
+    .toString();
+  if (options.port)
+    serverEnvString = serverEnvString.replace(
+      "PORT=80",
+      `PORT=${options.port}`
+    );
+  if (options.clientId)
+    serverEnvString = serverEnvString.replace(
+      "CLIENT_ID=",
+      `CLIENT_ID=${options.clientId}`
+    );
+  if (options.clientSecret) {
+    serverEnvString = serverEnvString.replace(
+      "CLIENT_SECRET=",
+      `CLIENT_SECRET=${options.clientSecret}`
+    );
+  }
+  if (options.signSecret) {
+    serverEnvString = serverEnvString.replace(
+      "SIGNING_SECRET=",
+      `SIGNING_SECRET=${options.signSecret}`
+    );
+  }
+  fs.writeFileSync(`${directory}/server/.env`, serverEnvString);
+}
+function modifyClientEnv(directory) {
+  shell.cp("client/.env.example", "client/.env");
+}
 function modifyProject(name) {
   directory = shell.pwd().stdout;
-  shell.cp("server/.env.example", "server/.env");
-  shell.cp("client/.env.example", "client/.env");
+  modifyServerEnv(directory);
+  modifyClientEnv(directory);
   const pkgJson = require(`${directory}/package.json`);
   pkgJson.name = name;
   fs.writeFileSync(
     `${directory}/package.json`,
     JSON.stringify(pkgJson, null, 2)
   );
+  shell.rm("yarn.lock");
 }
 
 function main() {
   shell.cd(options.dir);
-  console.log(shell.pwd().stdout);
+
   cloneGit(options.name);
 
   shell.cd(options.name);
@@ -67,6 +99,8 @@ function main() {
   modifyProject(options.name);
 
   initGit();
+
+  shell.exit(1);
 }
 
 if (require.main === module) {
