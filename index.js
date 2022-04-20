@@ -1,4 +1,4 @@
-// #!/usr/bin/env node
+#!/usr/bin/node
 const prompt = require("prompt-sync")({ sigint: true });
 const shell = require("shelljs");
 
