@@ -1,8 +1,31 @@
-#!/usr/bin/env node
+// #!/usr/bin/env node
 const prompt = require("prompt-sync")({ sigint: true });
 const shell = require("shelljs");
+
+const { program } = require("commander");
+const packageJson = require("./package.json");
+program
+  .name("create-tribe-app")
+  .description("CLI to generate a sample project using Tribe app starter kit")
+  .version(packageJson.version, "-v, --version", "Output the current version")
+  .showSuggestionAfterError()
+  .showHelpAfterError("(add --help for additional information)")
+  .usage("[global options] command")
+  .requiredOption("-n", "Name of the app")
+  .requiredOption("-d", "Directory to create the folder in.")
+  .option("-p, --port <port>", "Port number")
+  .option("--client-id <clientId>", "Client ID of the app.")
+  .option("--client-secret <clientSecret>", "Client Secret of the app.")
+  .option("--sign-secret <signSecret>", "Webhook sign secret of the app.")
+  .option("-v, --verbose", "Show each steps")
+  .parse();
+
+const options = program.opts();
+
+console.log(options);
+
 const fs = require("fs");
-const { exit } = require("process");
+
 const githubURL = "http://github.com/tribeplatform/tribe-starter-app";
 function cloneGit(name) {
   if (!shell.which("git")) {
