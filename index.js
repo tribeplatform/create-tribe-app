@@ -7,12 +7,12 @@ const packageJson = require("./package.json");
 program
   .name("create-tribe-app")
   .description("CLI to generate a sample project using Tribe app starter kit")
-  .version(packageJson.version, "-v, --version", "Output the current version")
+  .version(packageJson.version, "--version", "Output the current version")
   .showSuggestionAfterError()
   .showHelpAfterError("(add --help for additional information)")
   .usage("[global options] command")
-  .requiredOption("-n", "Name of the app")
-  .requiredOption("-d", "Directory to create the folder in.")
+  .requiredOption("--name <name>", "Name of the app")
+  .requiredOption("--dir <directory>", "Directory to create the folder in.")
   .option("-p, --port <port>", "Port number")
   .option("--client-id <clientId>", "Client ID of the app.")
   .option("--client-secret <clientSecret>", "Client Secret of the app.")
@@ -58,15 +58,13 @@ function modifyProject(name) {
 }
 
 function main() {
-  const name = prompt("Name:");
-  let directory = prompt("Directory:");
-  shell.cd(directory);
+  shell.cd(options.dir);
+  console.log(shell.pwd().stdout);
+  cloneGit(options.name);
 
-  cloneGit(name);
+  shell.cd(options.name);
 
-  shell.cd(name);
-
-  modifyProject(name);
+  modifyProject(options.name);
 
   initGit();
 }
