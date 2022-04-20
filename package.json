@@ -7,9 +7,9 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "bin": {
-    "myapp": "index.js"
+    "create-tribe-app": "index.js"
   },
-  "author": "Tribeplatform",
+  "author": "Tribe Platform",
   "license": "ISC",
   "dependencies": {
     "commander": "^9.2.0",
