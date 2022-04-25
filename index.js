@@ -11,7 +11,7 @@ const program = new commander.Command(packageJson.name)
   .showHelpAfterError("(add --help for additional information)")
   .usage("[global options] command")
   .requiredOption("--name <name>", "Name of the app")
-  .requiredOption("--dir <directory>", "Directory to create the folder in.")
+  .require("--dir <directory>", "Directory to create the folder in.")
   .option("-p, --port <port>", "Port number")
   .option("--client-id <clientId>", "Client ID of the app.")
   .option("--client-secret <clientSecret>", "Client Secret of the app.")
@@ -87,7 +87,9 @@ function modifyProject(name) {
 }
 
 function main() {
-  shell.cd(options.dir);
+  const dir = options.dir || ".";
+
+  shell.cd(dir);
 
   cloneGit(options.name);
 
