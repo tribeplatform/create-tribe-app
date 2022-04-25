@@ -4,7 +4,7 @@
   "description": "CLI to generate a sample project using Tribe app starter kit",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "bin": {
     "create-tribe-app": "index.js"
@@ -15,5 +15,8 @@
     "commander": "^9.2.0",
     "prompt-sync": "^4.2.0",
     "shelljs": "^0.8.5"
+  },
+  "devDependencies": {
+    "jest": "^27.5.1"
   }
 }
