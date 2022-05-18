@@ -5,6 +5,7 @@ const shell = require("shelljs");
 const commander = require("commander");
 const semver = require("semver");
 const chalk = require("chalk");
+const validateProjectName = require("validate-npm-package-name");
 const packageJson = require("./package.json");
 const util = require("./utils");
 
@@ -118,6 +119,30 @@ async function checkIfLatest() {
     current: packageJson.version,
   };
 }
+function checkAppName(name, log = true) {
+  const validationResult = validateProjectName(name);
+  if (!validationResult.validForNewPackages) {
+    if (log) {
+      console.error(
+        chalk.red(
+          `Cannot create a project named ${chalk.green(
+            `"${name}"`
+          )} because of npm naming restrictions:\n`
+        )
+      );
+    }
+    [
+      ...(validationResult.errors || []),
+      ...(validationResult.warnings || []),
+    ].forEach((error) => {
+      console.error(chalk.red(`  * ${error}`));
+    });
+    if (log) {
+      console.error(chalk.red("\nPlease choose a different project name."));
+    }
+  }
+  return validationResult.validForNewPackages;
+}
 
 async function main() {
   const { isLatest, latest, current } = await checkIfLatest();
@@ -131,15 +156,20 @@ async function main() {
     );
     console.log();
   } else {
-    shell.cd(options.dir);
+    const isNameValid = checkAppName(options.name, true);
+    if (isNameValid) {
+      shell.cd(options.dir);
 
-    cloneGit(options.name);
+      cloneGit(options.name);
 
-    shell.cd(options.name);
+      shell.cd(options.name);
 
-    modifyProject(options.name);
+      modifyProject(options.name);
 
-    initGit();
+      initGit();
+
+      console.log("Done.");
+    }
   }
   shell.exit(1);
 }

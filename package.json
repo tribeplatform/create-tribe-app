@@ -1,6 +1,6 @@
 {
   "name": "create-tribe-app",
-  "version": "1.0.6",
+  "version": "1.1.0",
   "description": "CLI to generate a sample project using Tribe app starter kit",
   "main": "index.js",
   "scripts": {
@@ -17,7 +17,8 @@
     "https": "^1.0.0",
     "prompt-sync": "^4.2.0",
     "semver": "^7.3.7",
-    "shelljs": "^0.8.5"
+    "shelljs": "^0.8.5",
+    "validate-npm-package-name": "^4.0.0"
   },
   "devDependencies": {
     "jest": "^27.5.1"
