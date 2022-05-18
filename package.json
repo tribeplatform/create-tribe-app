@@ -1,6 +1,6 @@
 {
   "name": "create-tribe-app",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "CLI to generate a sample project using Tribe app starter kit",
   "main": "index.js",
   "scripts": {
