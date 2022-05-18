@@ -1,9 +1,13 @@
 #!/usr/bin/env node
-const prompt = require("prompt-sync")({ sigint: true });
+
 const shell = require("shelljs");
 
 const commander = require("commander");
+const semver = require("semver");
+const chalk = require("chalk");
 const packageJson = require("./package.json");
+const util = require("./utils");
+
 const program = new commander.Command(packageJson.name)
   .description(packageJson.description)
   .version(packageJson.version, "--version", "Output the current version")
@@ -86,17 +90,47 @@ function modifyProject(name) {
   shell.rm("yarn.lock");
 }
 
-function main() {
-  shell.cd(options.dir);
+async function checkIfLatest() {
+  const latest = await util
+    .checkForLatestVersion(
+      `https://registry.npmjs.org/-/package/${packageJson.name}/dist-tags`
+    )
+    .catch(() => {
+      try {
+        return execSync("npm view create-react-app version").toString().trim();
+      } catch (e) {
+        return null;
+      }
+    });
+  return {
+    isLatest: latest && semver.gte(packageJson.version, latest),
+    latest,
+    current: packageJson.version,
+  };
+}
 
-  cloneGit(options.name);
+async function main() {
+  const { isLatest, latest, current } = await checkIfLatest();
+  if (!isLatest) {
+    console.log();
+    console.error(
+      chalk.yellow(
+        `You are running \`${packageJson.name}\` ${current}, which is behind the latest release (${latest}).\n\n` +
+          `We recommend always using the latest version of ${packageJson.name} if possible.`
+      )
+    );
+    console.log();
+  } else {
+    shell.cd(options.dir);
 
-  shell.cd(options.name);
+    cloneGit(options.name);
 
-  modifyProject(options.name);
+    shell.cd(options.name);
 
-  initGit();
+    modifyProject(options.name);
 
+    initGit();
+  }
   shell.exit(1);
 }
 
