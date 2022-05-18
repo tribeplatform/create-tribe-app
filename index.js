@@ -89,7 +89,9 @@ function modifyPackageJson(directory, name) {
 function modifyConfigYml(directory, name) {
   const path = `${directory}/.circleci/config.yml`;
   let configYml = fs.readFileSync(path).toString();
-  configYml = configYml.replaceAll("app-starter", name);
+  var find = "app-starter";
+  var re = new RegExp(find, "g");
+  configYml = configYml.replace(re, name);
   fs.writeFileSync(path, configYml);
 }
 function modifyProject(name) {
