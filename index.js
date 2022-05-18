@@ -77,16 +77,26 @@ function modifyServerEnv(directory) {
 function modifyClientEnv(directory) {
   shell.cp("client/.env.example", "client/.env");
 }
-function modifyProject(name) {
-  directory = shell.pwd().stdout;
-  modifyServerEnv(directory);
-  modifyClientEnv(directory);
+function modifyPackageJson(directory, name) {
   const pkgJson = require(`${directory}/package.json`);
   pkgJson.name = name;
   fs.writeFileSync(
     `${directory}/package.json`,
     JSON.stringify(pkgJson, null, 2)
   );
+}
+function modifyConfigYml(directory, name) {
+  const path = `${directory}/.circleci/config.yml`;
+  let configYml = fs.readFileSync(path).toString();
+  configYml = configYml.replaceAll("app-starter", name);
+  fs.writeFileSync(path, configYml);
+}
+function modifyProject(name) {
+  directory = shell.pwd().stdout;
+  modifyServerEnv(directory);
+  modifyClientEnv(directory);
+  modifyPackageJson(directory, name);
+  modifyConfigYml(directory, name);
   shell.rm("yarn.lock");
 }
 
